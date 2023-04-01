@@ -1,0 +1,122 @@
+- code: "kp"
+  name: "Key Press"
+  params: ["keycode"]
+
+- code: "bt"
+  name: "Bluetooth"
+  params: ["ext1"]
+  includes: []
+  ext1:
+    BT_CLR:
+    BT_NXT:
+    BT_PRV:
+    BT_SEL:
+      params: ["int"]
+
+- code: "bl"
+  name: "Backlight"
+  params: ["ext1"]
+  includes: []
+  ext1:
+    BL_ON:
+    BL_OFF:
+    BL_TOG:
+    BL_INC:
+    BL_DEC:
+    BL_CYCLE:
+    BL_SET:
+      params: ["int"]
+
+- code: "caps_word"
+  name: "Caps Word"
+  params: []
+
+- code: "ext_power"
+  name: "External Power"
+  params: ["ext1"]
+  includes: ["#include <dt-bindings/zmk/ext_power.h>"]
+  ext1:
+    EP_OFF:
+    EP_ON:
+    EP_TOG:
+
+- code: "key_repeat"
+  name: "Key Repeat"
+  params: []
+
+- code: "kt"
+  name: "Key Toggle"
+  params: ["keycode"]
+
+- code: "lt"
+  name: "Layer Tap"
+  params: ["layer", "keycode"]
+
+- code: "mt"
+  name: "Mod Tap"
+  params: ["keycode", "keycode"]
+
+- code: "mo"
+  name: "Momentary Layer"
+  params: ["layer"]
+
+- code: "out"
+  name: "Output Selection"
+  params: ["ext1"]
+  ext1:
+    OUT_USB:
+    OUT_BLE:
+    OUT_TOG:
+
+- code: "reset"
+  name: "Reset"
+  params: []
+
+- code: "bootloader"
+  name: "Bootloader"
+  params: []
+
+- code: "rgb_ug"
+  name: "RGB Underglow"
+  params: ["ext1"]
+  includes: ["#include <dt-bindings/zmk/rgb.h>"]
+  ext1:
+    RGB_ON:
+    RGB_OFF:
+    RGB_TOG:
+    RGB_HUI:
+    RGB_HUD:
+    RGB_SAI:
+    RGB_SAD:
+    RGB_BRI:
+    RGB_BRD:
+    RGB_SPI:
+    RGB_SPD:
+    RGB_EFF:
+    RGB_EFR:
+    RGB_COLOR_HSB:
+      params: ["color"]
+
+- code: "sk"
+  name: "Sticky Key"
+  params: ["keycode"]
+
+- code: "sl"
+  name: "Sticky Layer"
+  params: ["layer"]
+
+- code: "to"
+  name: "To Layer"
+  params: ["layer"]
+
+- code: "tog"
+  name: "Toggle Layer"
+  params: ["layer"]
+
+- code: "trans"
+  name: "Transparent"
+  params: []
+
+- code: "none"
+  name: "None"
+  params: []
