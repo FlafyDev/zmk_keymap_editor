@@ -5,7 +5,7 @@
 - code: "bt"
   name: "Bluetooth"
   params: ["ext1"]
-  includes: []
+  includes: ["#include <dt-bindings/zmk/bt.h>"]
   ext1:
     BT_CLR:
     BT_NXT:
@@ -16,7 +16,7 @@
 - code: "bl"
   name: "Backlight"
   params: ["ext1"]
-  includes: []
+  includes: ["#include <dt-bindings/zmk/backlight.h>"]
   ext1:
     BL_ON:
     BL_OFF:
@@ -63,6 +63,7 @@
 - code: "out"
   name: "Output Selection"
   params: ["ext1"]
+  includes: ["#include <dt-bindings/zmk/outputs.h>"]
   ext1:
     OUT_USB:
     OUT_BLE:

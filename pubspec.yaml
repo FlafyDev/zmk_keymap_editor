@@ -39,6 +39,8 @@ dependencies:
   freezed_annotation: ^2.2.0
   json_annotation: ^4.8.0
   flutter_typeahead: ^4.3.7
+  uuid: ^3.0.6
+  yaml_writer: ^1.0.3
 
 dev_dependencies:
   flutter_test:

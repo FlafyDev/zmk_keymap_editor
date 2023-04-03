@@ -5,10 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:zmk_keymap_editor/main.dart';
 import 'package:zmk_keymap_editor/models/keymap.dart';
 import 'package:zmk_keymap_editor/models/zmk_data.dart';
 import 'package:zmk_keymap_editor/providers/keymap_provider.dart';
 import 'package:zmk_keymap_editor/providers/zmk_behaviors_data_provider.dart';
+import 'package:zmk_keymap_editor/providers/zmk_keycodes_provider.dart';
 import 'package:zmk_keymap_editor/widgets/key.dart';
 import 'package:collection/collection.dart';
 
@@ -157,13 +159,13 @@ class KeyEditor extends HookConsumerWidget {
               );
             },
             onSuggestionSelected: (suggestion) {
-              code.value = suggestion.code;
               if (code.value != suggestion.code) {
                 params.value = List.generate(
                   suggestion.params.length,
                   (i) => "",
                 );
               }
+              code.value = suggestion.code;
               controllers.value.first.text = suggestion.code;
             },
           ),
@@ -224,6 +226,7 @@ class _ParameterField extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final keymap = ref.watch(keymapProvider);
+    final keycodes = ref.watch(zmkKeycodesProvider).valueOrNull ?? [];
 
     final List<_AutocompleteSuggestion> data;
     final String hintText;
@@ -231,12 +234,12 @@ class _ParameterField extends HookConsumerWidget {
     switch (type) {
       case ZMKBehaviorParamType.keycode:
         hintText = "Code";
-        data = [_AutocompleteSuggestion("A"), _AutocompleteSuggestion("B")];
+        data = keycodes.map((keycode) => _AutocompleteSuggestion(keycode)).toList();
         break;
       case ZMKBehaviorParamType.layer:
         hintText = "Layer";
         data =
-            keymap.layers.keys.map((e) => _AutocompleteSuggestion(e)).toList();
+            keymap.layerNames.map((e) => _AutocompleteSuggestion(e)).toList();
         break;
       case ZMKBehaviorParamType.ext1:
         hintText = "Options";
@@ -250,7 +253,7 @@ class _ParameterField extends HookConsumerWidget {
             onChanged(value);
           },
           autofocus: autofocus ?? false,
-          decoration: _makeInputDecoration(context, hintText: "Integer"),
+          decoration: makeInputDecoration(context, hintText: "Integer"),
           inputFormatters: [
             FilteringTextInputFormatter.digitsOnly
           ], // Only numbers can be entered
@@ -263,7 +266,7 @@ class _ParameterField extends HookConsumerWidget {
             onChanged(value);
           },
           autofocus: autofocus ?? false,
-          decoration: _makeInputDecoration(context, hintText: "String"),
+          decoration: makeInputDecoration(context, hintText: "String"),
         );
       case ZMKBehaviorParamType.color:
         throw UnimplementedError();
@@ -320,7 +323,7 @@ class _AutocompleteField<T> extends StatelessWidget {
       textFieldConfiguration: TextFieldConfiguration(
         controller: controller,
         autofocus: autofocus ?? false,
-        decoration: _makeInputDecoration(context, hintText: hintText),
+        decoration: makeInputDecoration(context, hintText: hintText),
       ),
       hideOnLoading: true,
       suggestionsCallback: suggestionsCallback,
@@ -330,25 +333,3 @@ class _AutocompleteField<T> extends StatelessWidget {
   }
 }
 
-InputDecoration _makeInputDecoration(
-  BuildContext context, {
-  String? hintText,
-}) {
-  final theme = Theme.of(context);
-
-  return InputDecoration(
-    filled: true,
-    fillColor: theme.buttonTheme.colorScheme?.background.withOpacity(0.5),
-    labelText: hintText,
-    floatingLabelBehavior: FloatingLabelBehavior.always,
-    contentPadding: const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
-    focusedBorder: UnderlineInputBorder(
-      borderSide: BorderSide(
-          color: theme.buttonTheme.colorScheme?.outline ?? Colors.black),
-    ),
-    border: UnderlineInputBorder(
-      borderSide: BorderSide(
-          color: theme.buttonTheme.colorScheme?.outline ?? Colors.black),
-    ),
-  );
-}

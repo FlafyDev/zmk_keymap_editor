@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:zmk_keymap_editor/main.dart';
 import 'package:zmk_keymap_editor/models/keymap.dart';
 import 'package:zmk_keymap_editor/providers/keymap_provider.dart';
 import 'package:zmk_keymap_editor/providers/layout_provider.dart';
@@ -8,15 +9,16 @@ import 'package:zmk_keymap_editor/widgets/key.dart';
 import 'package:zmk_keymap_editor/widgets/keyEditor.dart';
 
 class LayoutWidget extends HookConsumerWidget {
-  LayoutWidget({Key? key}) : super(key: key);
+  LayoutWidget({required this.layerId, Key? key}) : super(key: key);
+
+  final String layerId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final layout = ref.watch(layoutProvider);
     final keymap = ref.watch(keymapProvider);
     final pointerMoved = useRef(Offset.zero);
-    final layerName = useState("default_layer");
-    final keys = keymap.layers[layerName.value]!;
+    final keys = keymap.layerFromId(layerId).keys;
 
     return AspectRatio(
       aspectRatio: 3 / 1,
@@ -43,11 +45,8 @@ class LayoutWidget extends HookConsumerWidget {
                   (e) {
                     final index = e.key;
                     final key = e.value;
-                    final behavior = index >= keys.length ? keys[0] : keys[index];
-
-                    // if (index >= keys.length) {
-                    //   return Container();
-                    // }
+                    final behavior =
+                        index >= keys.length ? keys[0] : keys[index];
 
                     final child = Transform.rotate(
                       angle: key.rotation,
@@ -55,30 +54,21 @@ class LayoutWidget extends HookConsumerWidget {
                         behavior,
                         size: keySize,
                         onPressed: (partPressed) {
-                          showDialog(
+                          showPopupDialog(
                             context: context,
-                            barrierLabel: "Barrier",
-                            barrierDismissible: true,
-                            barrierColor: Colors.black.withOpacity(0.5),
                             builder: (context) {
-                              return Dialog(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12.0)),
-                                child: Material(
-                                  child: KeyEditor(
-                                    behavior,
-                                    initialFocus: partPressed,
-                                    onKeyModify: (key) {
-                                      if (key != null) {
-                                        ref
-                                            .read(keymapProvider.notifier)
-                                            .updateKeyInLayer(layerName.value,
-                                                index, key);
-                                      }
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ),
+                              return KeyEditor(
+                                behavior,
+                                initialFocus: partPressed,
+                                onKeyModify: (key) {
+                                  if (key != null) {
+                                    ref
+                                        .read(keymapProvider.notifier)
+                                        .updateKeyInLayer(
+                                            layerId, index, key);
+                                  }
+                                  Navigator.of(context).pop();
+                                },
                               );
                             },
                           );
