@@ -6,10 +6,11 @@ ZMK Keymap Editor written in Flutter.
 
 ### Todo
 - Loading differnt keymaps
-
-- Figure out what key modifiers are
+- Key modifiers for keycodes
 - Combos
 - Macros
+- Automatically apply the behavior of the last edited key
+
 - Custom behaviors
 - Layout switcher and creator
 

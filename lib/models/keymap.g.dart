@@ -11,8 +11,7 @@ _$_KeymapLayer _$$_KeymapLayerFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String,
       id: json['id'] as String,
       keys: (json['keys'] as List<dynamic>)
-          .map((e) => ZMKBehavior.fromJson(
-              (e as List<dynamic>).map((e) => e as String).toList()))
+          .map((e) => ZMKBehavior.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 

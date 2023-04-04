@@ -6,7 +6,7 @@ import 'package:yaml/yaml.dart';
 import 'package:zmk_keymap_editor/extensions/yaml_converter.dart';
 import 'package:zmk_keymap_editor/models/zmk_data.dart';
 
-final zmkBehaviorsDataProvider = FutureProvider((ref) async {
+final zmkDataBehaviors = FutureProvider((ref) async {
   final dataString = await rootBundle.loadString('assets/data/behaviors.yaml');
   final dataJson = (loadYaml(dataString) as YamlList)
       .map((e) => (e as YamlMap).toMap())

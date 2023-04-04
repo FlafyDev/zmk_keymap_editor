@@ -6,13 +6,13 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:yaml/yaml.dart';
 import 'package:zmk_keymap_editor/extensions/yaml_converter.dart';
 import 'package:zmk_keymap_editor/extensions/zmk_keymap_converter.dart';
+import 'package:zmk_keymap_editor/providers/zmk_data_behaviors_provider.dart';
 import 'package:zmk_keymap_editor/save_keymap_as_yaml.dart';
 import 'package:zmk_keymap_editor/widgets/layout.dart';
 import 'package:stack_trace/stack_trace.dart' as stack_trace;
 
 import 'models/keymap.dart';
 import 'providers/keymap_provider.dart';
-import 'providers/zmk_behaviors_data_provider.dart';
 import 'widgets/layer_menu.dart';
 
 void main() {
@@ -63,7 +63,7 @@ class MyApp extends HookConsumerWidget {
                         final keymapFile = ref.read(keymapFileProvider);
 
                         await saveKeymap(keymap, keymapFile);
-                        ref.read(zmkBehaviorsDataProvider).whenData((zmkDataBehaviors) async {
+                        ref.read(zmkDataBehaviors).whenData((zmkDataBehaviors) async {
                             final zmkKeymap = keymap.toZmkKeymap(zmkDataBehaviors);
                             await File("/mnt/general/repos/flafydev/zmk-config/config/kyria_rev3.keymap").writeAsString(zmkKeymap);
                         });

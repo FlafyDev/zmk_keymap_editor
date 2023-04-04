@@ -7,6 +7,7 @@ import 'package:zmk_keymap_editor/providers/keymap_provider.dart';
 import 'package:zmk_keymap_editor/providers/layout_provider.dart';
 import 'package:zmk_keymap_editor/widgets/key.dart';
 import 'package:zmk_keymap_editor/widgets/keyEditor.dart';
+import 'package:zmk_keymap_editor/widgets/key_code_editor.dart';
 
 class LayoutWidget extends HookConsumerWidget {
   LayoutWidget({required this.layerId, Key? key}) : super(key: key);
@@ -57,19 +58,28 @@ class LayoutWidget extends HookConsumerWidget {
                           showPopupDialog(
                             context: context,
                             builder: (context) {
-                              return KeyEditor(
-                                behavior,
-                                initialFocus: partPressed,
-                                onKeyModify: (key) {
-                                  if (key != null) {
-                                    ref
-                                        .read(keymapProvider.notifier)
-                                        .updateKeyInLayer(
-                                            layerId, index, key);
-                                  }
-                                  Navigator.of(context).pop();
+                              return KeyCodeEditor(
+                                code: behavior.code,
+                                onCodeChanged: (code) {
+                                  // ref
+                                  //     .read(keymapProvider.notifier)
+                                  //     .updateKeyInLayer(layerId, index, code);
+                                  // Navigator.of(context).pop();
                                 },
                               );
+                              // return KeyEditor(
+                              //   behavior,
+                              //   initialFocus: partPressed,
+                              //   onKeyModify: (key) {
+                              //     if (key != null) {
+                              //       ref
+                              //           .read(keymapProvider.notifier)
+                              //           .updateKeyInLayer(
+                              //               layerId, index, key);
+                              //     }
+                              //     Navigator.of(context).pop();
+                              //   },
+                              // );
                             },
                           );
                         },

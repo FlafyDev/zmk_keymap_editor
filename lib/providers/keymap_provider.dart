@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:yaml/yaml.dart';
 import 'package:zmk_keymap_editor/extensions/yaml_converter.dart';
 import 'package:zmk_keymap_editor/models/keymap.dart';
+import 'package:zmk_keymap_editor/models/zmk.dart';
 import 'package:zmk_keymap_editor/providers/layout_provider.dart';
 import 'package:yaml_writer/yaml_writer.dart';
 

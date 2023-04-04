@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:zmk_keymap_editor/models/keymap.dart';
+import 'package:zmk_keymap_editor/models/zmk.dart';
+import 'package:zmk_keymap_editor/providers/keymap_provider.dart';
 
 class KeyWidget extends HookConsumerWidget {
   KeyWidget(
@@ -18,6 +20,8 @@ class KeyWidget extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final multipleParams = behavior.params.length >= 2;
+    final keymap = ref.watch(keymapProvider);
+
     return Container(
       width: size.width,
       height: size.height,
@@ -76,7 +80,7 @@ class KeyWidget extends HookConsumerWidget {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 8.0, vertical: 2.0),
                                 child: Text(
-                                  e.value,
+                                  e.value.getSaved(keymap.layers),
                                   style: TextStyle(
                                     fontSize: size.width /
                                         (4 + (multipleParams ? 1 : 0)),
