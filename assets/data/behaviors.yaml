@@ -4,9 +4,9 @@
 
 - code: "bt"
   name: "Bluetooth"
-  params: ["ext1"]
+  params: ["options"]
   includes: ["#include <dt-bindings/zmk/bt.h>"]
-  ext1:
+  options:
     BT_CLR:
     BT_NXT:
     BT_PRV:
@@ -15,9 +15,9 @@
 
 - code: "bl"
   name: "Backlight"
-  params: ["ext1"]
+  params: ["options"]
   includes: ["#include <dt-bindings/zmk/backlight.h>"]
-  ext1:
+  options:
     BL_ON:
     BL_OFF:
     BL_TOG:
@@ -33,9 +33,9 @@
 
 - code: "ext_power"
   name: "External Power"
-  params: ["ext1"]
+  params: ["options"]
   includes: ["#include <dt-bindings/zmk/ext_power.h>"]
-  ext1:
+  options:
     EP_OFF:
     EP_ON:
     EP_TOG:
@@ -62,9 +62,9 @@
 
 - code: "out"
   name: "Output Selection"
-  params: ["ext1"]
+  params: ["options"]
   includes: ["#include <dt-bindings/zmk/outputs.h>"]
-  ext1:
+  options:
     OUT_USB:
     OUT_BLE:
     OUT_TOG:
@@ -79,9 +79,9 @@
 
 - code: "rgb_ug"
   name: "RGB Underglow"
-  params: ["ext1"]
+  params: ["options"]
   includes: ["#include <dt-bindings/zmk/rgb.h>"]
-  ext1:
+  options:
     RGB_ON:
     RGB_OFF:
     RGB_TOG:

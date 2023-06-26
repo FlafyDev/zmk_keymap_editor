@@ -1,6 +1,7 @@
 // code without the '&' prefix
 import 'package:zmk_keymap_editor/models/keymap.dart';
 import 'package:zmk_keymap_editor/models/zmk_data.dart';
+import 'package:collection/collection.dart';
 
 class ZMKBehavior {
   const ZMKBehavior(this.code, this.params);
@@ -39,6 +40,7 @@ class ZMKBehavior {
 abstract class ZMKBehaviorParam {
   const ZMKBehaviorParam();
   String getSaved(List<KeymapLayer> layers);
+  String getPreview(List<KeymapLayer> layers) => getSaved(layers);
   Map<String, Object?> toJson();
   abstract final ZMKBehaviorParamType type;
 
@@ -48,8 +50,8 @@ abstract class ZMKBehaviorParam {
         return ZMKBehaviorParamKeycode.fromJson(json);
       case ZMKBehaviorParamType.layer:
         return ZMKBehaviorParamLayer.fromJson(json);
-      case ZMKBehaviorParamType.ext1:
-        return ZMKBehaviorParamExt1.fromJson(json);
+      case ZMKBehaviorParamType.options:
+        return ZMKBehaviorParamOptions.fromJson(json);
       case ZMKBehaviorParamType.int:
         return ZMKBehaviorParamInt.fromJson(json);
       case ZMKBehaviorParamType.string:
@@ -60,6 +62,36 @@ abstract class ZMKBehaviorParam {
     }
   }
 
+  factory ZMKBehaviorParam.fromType(ZMKBehaviorParamType type) {
+    switch (type) {
+      case ZMKBehaviorParamType.keycode:
+        return ZMKBehaviorParamKeycode(
+          keycode: "A",
+          modifiers: [],
+        );
+      case ZMKBehaviorParamType.layer:
+        return ZMKBehaviorParamLayer(
+          layerId: "",
+        );
+      case ZMKBehaviorParamType.options:
+        return ZMKBehaviorParamOptions(
+          selected: "x",
+        );
+      case ZMKBehaviorParamType.int:
+        return ZMKBehaviorParamInt(
+          val: 0,
+        );
+      case ZMKBehaviorParamType.string:
+        return ZMKBehaviorParamString(
+          val: "",
+        );
+      case ZMKBehaviorParamType.color:
+        throw UnimplementedError();
+        // return ZMKBehaviorParamColor(
+        //   color: "",
+        // );
+    }
+  }
 }
 
 class ZMKBehaviorParamKeycode extends ZMKBehaviorParam {
@@ -78,6 +110,23 @@ class ZMKBehaviorParamKeycode extends ZMKBehaviorParam {
         (")" * modifiers.length);
   }
 
+  @override
+  String getPreview(List<KeymapLayer> layers) {
+    final dataModifiers = {
+      "LC": "⌃",
+      "LS": "⇧",
+      "LA": "⌥",
+      "LG": "⌘",
+      "RC": "⌃",
+      "RS": "⇧",
+      "RA": "⌥",
+      "RG": "⌘",
+    };
+
+    return modifiers.map((mod) => "${dataModifiers[mod]} ").join("") +
+        keycode;
+  }
+
   ZMKBehaviorParamType get type => ZMKBehaviorParamType.keycode;
 
   Map<String, Object?> toJson() {
@@ -92,7 +141,7 @@ class ZMKBehaviorParamKeycode extends ZMKBehaviorParam {
     return ZMKBehaviorParamKeycode(
       keycode: json["keycode"] as String,
       modifiers:
-          (json["modifiers"] as List<Object?>? ?? []).map((e) => e as String).toList(),
+          (json["modifiers"] as List<Object?>).map((e) => e as String).toList(),
     );
   }
 }
@@ -107,6 +156,11 @@ class ZMKBehaviorParamLayer extends ZMKBehaviorParam {
   @override
   String getSaved(List<KeymapLayer> layers) {
     return layers.indexWhere((layer) => layer.id == layerId).toString();
+  }
+  
+  @override
+  String getPreview(List<KeymapLayer> layers) {
+    return layers.firstWhereOrNull((layer) => layer.id == layerId)?.name ?? "";
   }
 
   ZMKBehaviorParamType get type => ZMKBehaviorParamType.layer;
@@ -181,30 +235,30 @@ class ZMKBehaviorParamString extends ZMKBehaviorParam {
   }
 }
 
-class ZMKBehaviorParamExt1 extends ZMKBehaviorParam {
-  const ZMKBehaviorParamExt1({
-    required this.val,
+class ZMKBehaviorParamOptions extends ZMKBehaviorParam {
+  const ZMKBehaviorParamOptions({
+    required this.selected,
   });
 
-  final String val;
+  final String selected;
 
   @override
   String getSaved(List<KeymapLayer> layers) {
-    return val;
+    return selected;
   }
 
-  ZMKBehaviorParamType get type => ZMKBehaviorParamType.ext1;
+  ZMKBehaviorParamType get type => ZMKBehaviorParamType.options;
 
   Map<String, Object?> toJson() {
     return {
       "type": type.name,
-      "val": val,
+      "selected": selected,
     };
   }
 
-  factory ZMKBehaviorParamExt1.fromJson(Map<String, Object?> json) {
-    return ZMKBehaviorParamExt1(
-      val: json["val"] as String,
+  factory ZMKBehaviorParamOptions.fromJson(Map<String, Object?> json) {
+    return ZMKBehaviorParamOptions(
+      selected: json["selected"] as String,
     );
   }
 }

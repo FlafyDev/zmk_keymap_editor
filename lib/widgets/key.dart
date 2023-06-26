@@ -80,7 +80,7 @@ class KeyWidget extends HookConsumerWidget {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 8.0, vertical: 2.0),
                                 child: Text(
-                                  e.value.getSaved(keymap.layers),
+                                  e.value.getPreview(keymap.layers),
                                   style: TextStyle(
                                     fontSize: size.width /
                                         (4 + (multipleParams ? 1 : 0)),
@@ -96,11 +96,14 @@ class KeyWidget extends HookConsumerWidget {
               ),
               Align(
                 alignment: Alignment.topLeft,
-                child: Text(
-                  "&${behavior.code}",
-                  style: TextStyle(
-                    fontSize: size.width / 6,
-                    fontWeight: FontWeight.bold,
+                child: FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: Text(
+                    "&${behavior.code}",
+                    style: TextStyle(
+                      fontSize: size.width / 6,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),

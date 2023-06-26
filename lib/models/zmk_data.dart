@@ -6,7 +6,7 @@ part 'zmk_data.g.dart';
 enum ZMKBehaviorParamType {
   @JsonValue("keycode") keycode,
   @JsonValue("layer") layer,
-  @JsonValue("ext1") ext1,
+  @JsonValue("options") options,
   @JsonValue("int") int,
   @JsonValue("string") string,
   @JsonValue("color") color,
@@ -19,7 +19,7 @@ class ZMKDataBehavior with _$ZMKDataBehavior {
     required String name,
     required List<String>? includes,
     required List<ZMKBehaviorParamType> params,
-    required Map<String, ZMKDataBehaviorExternalParam?>? ext1,
+    required Map<String, ZMKDataBehaviorExternalParam?>? options,
   }) = _ZMKDataBehavior;
 
   factory ZMKDataBehavior.fromJson(Map<String, Object?> json) =>

@@ -3,7 +3,6 @@ import 'package:zmk_keymap_editor/models/zmk_data.dart';
 
 extension ZMKKeymapConverter on Keymap {
   String toZmkKeymap(List<ZMKDataBehavior> behaviorsData) {
-    throw UnimplementedError();
     // final layers = this.layers.map((layer) {
     //    return layer.copyWith(
     //      keys: layer.keys.map((key) {
@@ -21,44 +20,46 @@ extension ZMKKeymapConverter on Keymap {
     //    );
     // }).toList();
 
-//     final allKeys = layers.map((layer) => layer.keys).expand((e) => e).toList();
-//     final allBehaviorsUsed = allKeys
-//         .map((e) => behaviorsData.firstWhere((data) => data.code == e.code))
-//         .toSet()
-//         .toList();
-//
-//     print(allBehaviorsUsed);
-//     final includes = [
-//           "#include <behaviors.dtsi>",
-//           "#include <dt-bindings/zmk/keys.h>",
-//         ] +
-//         allBehaviorsUsed
-//             .map((e) => e.includes ?? [])
-//             .expand((e) => e)
-//             .toSet()
-//             .toList();
-//
-//     final layersString = layers.asMap().entries.map((e) {
-//       final index = e.key;
-//       final layer = e.value;
-//
-//       final keyList = layer.keys
-//           .map((key) => "&${key.code} ${key.params.join(' ')}".trim())
-//           .join(" ");
-//
-//       return "layer_$index \{ bindings = <$keyList>; \};";
-//     }).toList();
-//
-//     final keymap =
-//         "keymap \{ compatible = \"zmk,keymap\"; ${layersString.join(' ')} \};";
-//
-//     return """
-// ${includes.join("\n")}
-//
-// / {
-//     $keymap
-// };
-//     """
-//         .trim();
+    final allKeys = layers.map((layer) => layer.keys).expand((e) => e).toList();
+    final allBehaviorsUsed = allKeys
+        .map((e) => behaviorsData.firstWhere((data) => data.code == e.code))
+        .toSet()
+        .toList();
+
+    final includes = [
+          "#include <behaviors.dtsi>",
+          "#include <dt-bindings/zmk/keys.h>",
+        ] +
+        allBehaviorsUsed
+            .map((e) => e.includes ?? [])
+            .expand((e) => e)
+            .toSet()
+            .toList();
+
+    final layersString = layers.asMap().entries.map((e) {
+      final index = e.key;
+      final layer = e.value;
+
+      final keyList = layer.keys
+          .map((key) =>
+              "&${key.code} ${key.params.map((param) => param.getSaved(layers)).join(' ')}"
+                  .trim())
+          .join(" ");
+
+      return "layer_$index \{ bindings = <$keyList>; \};";
+    }).toList();
+
+    final keymap =
+        "keymap \{ compatible = \"zmk,keymap\"; ${layersString.join(' ')} \};";
+
+    return """
+${includes.join("\n")}
+
+/ {
+    $keymap
+};
+    """
+            .trim() +
+        "\n";
   }
 }

@@ -3,11 +3,15 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:zmk_keymap_editor/main.dart';
 import 'package:zmk_keymap_editor/models/keymap.dart';
+import 'package:zmk_keymap_editor/models/zmk.dart';
+import 'package:zmk_keymap_editor/models/zmk_data.dart';
 import 'package:zmk_keymap_editor/providers/keymap_provider.dart';
 import 'package:zmk_keymap_editor/providers/layout_provider.dart';
+import 'package:zmk_keymap_editor/providers/zmk_data_behaviors_provider.dart';
 import 'package:zmk_keymap_editor/widgets/key.dart';
 import 'package:zmk_keymap_editor/widgets/keyEditor.dart';
 import 'package:zmk_keymap_editor/widgets/key_code_editor.dart';
+import 'package:zmk_keymap_editor/widgets/key_param_editor.dart';
 
 class LayoutWidget extends HookConsumerWidget {
   LayoutWidget({required this.layerId, Key? key}) : super(key: key);
@@ -20,6 +24,7 @@ class LayoutWidget extends HookConsumerWidget {
     final keymap = ref.watch(keymapProvider);
     final pointerMoved = useRef(Offset.zero);
     final keys = keymap.layerFromId(layerId).keys;
+    final dataBehaviors = ref.watch(zmkDataBehaviorsProvider).valueOrNull;
 
     return AspectRatio(
       aspectRatio: 3 / 1,
@@ -37,8 +42,8 @@ class LayoutWidget extends HookConsumerWidget {
           // ),
           LayoutBuilder(builder: (context, contraints) {
             final keySize = Size(
-              42 * contraints.maxWidth / 900,
-              42 * contraints.maxWidth / 900,
+              45 * contraints.maxWidth / 900,
+              45 * contraints.maxWidth / 900,
             );
             return Center(
               child: Stack(
@@ -55,18 +60,81 @@ class LayoutWidget extends HookConsumerWidget {
                         behavior,
                         size: keySize,
                         onPressed: (partPressed) {
+                          final paramIndex = partPressed - 1;
                           showPopupDialog(
                             context: context,
                             builder: (context) {
-                              return KeyCodeEditor(
-                                code: behavior.code,
-                                onCodeChanged: (code) {
-                                  // ref
-                                  //     .read(keymapProvider.notifier)
-                                  //     .updateKeyInLayer(layerId, index, code);
-                                  // Navigator.of(context).pop();
+                              if (partPressed == 0) {
+                                return KeyCodeEditor(
+                                  code: behavior.code,
+                                  onCodeChanged: (code) {
+                                    final behaviorData = dataBehaviors!
+                                        .firstWhere((e) => e.code == code);
+                                    ref
+                                        .read(keymapProvider.notifier)
+                                        .updateKeyInLayer(
+                                            layerId,
+                                            index,
+                                            behavior.copyWith(
+                                              code: code,
+                                              params: behaviorData.params
+                                                  .map((e) =>
+                                                      ZMKBehaviorParam.fromType(
+                                                          e))
+                                                  .toList(),
+                                            ));
+                                  },
+                                );
+                              }
+                              final dataBehavior = dataBehaviors!
+                                  .firstWhere((e) => e.code == behavior.code);
+                              return KeyParamEditor(
+                                dataBehavior: dataBehavior,
+                                param: behavior.params[paramIndex],
+                                onParamChanged: (param) {
+                                  var params = [...behavior.params];
+                                  params..[paramIndex] = param;
+
+                                  if (paramIndex == 0 && dataBehavior.params[paramIndex] ==
+                                      ZMKBehaviorParamType.options) {
+                                    final externalParam = dataBehavior
+                                        .options!.entries
+                                        .firstWhere((e) =>
+                                            e.key ==
+                                            (param as ZMKBehaviorParamOptions)
+                                                .selected)
+                                        .value;
+                                    if (externalParam != null) {
+                                      params = params.take(1).toList();
+                                      params += externalParam.params!.map((e) =>
+                                          ZMKBehaviorParam.fromType(e)).toList();
+                                    } else {
+                                      params = params.take(1).toList();
+                                    }
+                                  }
+
+                                  print(params);
+
+                                  ref
+                                      .read(keymapProvider.notifier)
+                                      .updateKeyInLayer(
+                                        layerId,
+                                        index,
+                                        behavior.copyWith(
+                                          params: params,
+                                        ),
+                                      );
                                 },
                               );
+                              // return KeyCodeEditor(
+                              //   code: behavior.code,
+                              //   onCodeChanged: (code) {
+                              //     // ref
+                              //     //     .read(keymapProvider.notifier)
+                              //     //     .updateKeyInLayer(layerId, index, code);
+                              //     // Navigator.of(context).pop();
+                              //   },
+                              // );
                               // return KeyEditor(
                               //   behavior,
                               //   initialFocus: partPressed,

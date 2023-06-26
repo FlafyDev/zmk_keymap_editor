@@ -16,7 +16,7 @@ _$_ZMKDataBehavior _$$_ZMKDataBehaviorFromJson(Map<String, dynamic> json) =>
       params: (json['params'] as List<dynamic>)
           .map((e) => $enumDecode(_$ZMKBehaviorParamTypeEnumMap, e))
           .toList(),
-      ext1: (json['ext1'] as Map<String, dynamic>?)?.map(
+      options: (json['options'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(
             k,
             e == null
@@ -34,13 +34,13 @@ Map<String, dynamic> _$$_ZMKDataBehaviorToJson(_$_ZMKDataBehavior instance) =>
       'params': instance.params
           .map((e) => _$ZMKBehaviorParamTypeEnumMap[e]!)
           .toList(),
-      'ext1': instance.ext1,
+      'options': instance.options,
     };
 
 const _$ZMKBehaviorParamTypeEnumMap = {
   ZMKBehaviorParamType.keycode: 'keycode',
   ZMKBehaviorParamType.layer: 'layer',
-  ZMKBehaviorParamType.ext1: 'ext1',
+  ZMKBehaviorParamType.options: 'options',
   ZMKBehaviorParamType.int: 'int',
   ZMKBehaviorParamType.string: 'string',
   ZMKBehaviorParamType.color: 'color',

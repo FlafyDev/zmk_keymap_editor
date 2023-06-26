@@ -63,10 +63,12 @@ class MyApp extends HookConsumerWidget {
                         final keymapFile = ref.read(keymapFileProvider);
 
                         await saveKeymap(keymap, keymapFile);
-                        ref.read(zmkDataBehaviors).whenData((zmkDataBehaviors) async {
-                            final zmkKeymap = keymap.toZmkKeymap(zmkDataBehaviors);
-                            await File("/mnt/general/repos/flafydev/zmk-config/config/kyria_rev3.keymap").writeAsString(zmkKeymap);
-                        });
+                        final zmkDataBehaviors =
+                            await ref.read(zmkDataBehaviorsProvider.future);
+                        final zmkKeymap = keymap.toZmkKeymap(zmkDataBehaviors);
+                        await File(
+                                "/mnt/general/repos/flafydev/zmk-config/config/kyria_rev3.keymap")
+                            .writeAsString(zmkKeymap);
                       },
                       child: Text("Compile"),
                     ),

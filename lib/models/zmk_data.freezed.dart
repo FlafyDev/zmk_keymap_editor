@@ -24,7 +24,7 @@ mixin _$ZMKDataBehavior {
   String get name => throw _privateConstructorUsedError;
   List<String>? get includes => throw _privateConstructorUsedError;
   List<ZMKBehaviorParamType> get params => throw _privateConstructorUsedError;
-  Map<String, ZMKDataBehaviorExternalParam?>? get ext1 =>
+  Map<String, ZMKDataBehaviorExternalParam?>? get options =>
       throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -44,7 +44,7 @@ abstract class $ZMKDataBehaviorCopyWith<$Res> {
       String name,
       List<String>? includes,
       List<ZMKBehaviorParamType> params,
-      Map<String, ZMKDataBehaviorExternalParam?>? ext1});
+      Map<String, ZMKDataBehaviorExternalParam?>? options});
 }
 
 /// @nodoc
@@ -64,7 +64,7 @@ class _$ZMKDataBehaviorCopyWithImpl<$Res, $Val extends ZMKDataBehavior>
     Object? name = null,
     Object? includes = freezed,
     Object? params = null,
-    Object? ext1 = freezed,
+    Object? options = freezed,
   }) {
     return _then(_value.copyWith(
       code: null == code
@@ -83,9 +83,9 @@ class _$ZMKDataBehaviorCopyWithImpl<$Res, $Val extends ZMKDataBehavior>
           ? _value.params
           : params // ignore: cast_nullable_to_non_nullable
               as List<ZMKBehaviorParamType>,
-      ext1: freezed == ext1
-          ? _value.ext1
-          : ext1 // ignore: cast_nullable_to_non_nullable
+      options: freezed == options
+          ? _value.options
+          : options // ignore: cast_nullable_to_non_nullable
               as Map<String, ZMKDataBehaviorExternalParam?>?,
     ) as $Val);
   }
@@ -104,7 +104,7 @@ abstract class _$$_ZMKDataBehaviorCopyWith<$Res>
       String name,
       List<String>? includes,
       List<ZMKBehaviorParamType> params,
-      Map<String, ZMKDataBehaviorExternalParam?>? ext1});
+      Map<String, ZMKDataBehaviorExternalParam?>? options});
 }
 
 /// @nodoc
@@ -122,7 +122,7 @@ class __$$_ZMKDataBehaviorCopyWithImpl<$Res>
     Object? name = null,
     Object? includes = freezed,
     Object? params = null,
-    Object? ext1 = freezed,
+    Object? options = freezed,
   }) {
     return _then(_$_ZMKDataBehavior(
       code: null == code
@@ -141,9 +141,9 @@ class __$$_ZMKDataBehaviorCopyWithImpl<$Res>
           ? _value._params
           : params // ignore: cast_nullable_to_non_nullable
               as List<ZMKBehaviorParamType>,
-      ext1: freezed == ext1
-          ? _value._ext1
-          : ext1 // ignore: cast_nullable_to_non_nullable
+      options: freezed == options
+          ? _value._options
+          : options // ignore: cast_nullable_to_non_nullable
               as Map<String, ZMKDataBehaviorExternalParam?>?,
     ));
   }
@@ -157,10 +157,10 @@ class _$_ZMKDataBehavior implements _ZMKDataBehavior {
       required this.name,
       required final List<String>? includes,
       required final List<ZMKBehaviorParamType> params,
-      required final Map<String, ZMKDataBehaviorExternalParam?>? ext1})
+      required final Map<String, ZMKDataBehaviorExternalParam?>? options})
       : _includes = includes,
         _params = params,
-        _ext1 = ext1;
+        _options = options;
 
   factory _$_ZMKDataBehavior.fromJson(Map<String, dynamic> json) =>
       _$$_ZMKDataBehaviorFromJson(json);
@@ -187,19 +187,19 @@ class _$_ZMKDataBehavior implements _ZMKDataBehavior {
     return EqualUnmodifiableListView(_params);
   }
 
-  final Map<String, ZMKDataBehaviorExternalParam?>? _ext1;
+  final Map<String, ZMKDataBehaviorExternalParam?>? _options;
   @override
-  Map<String, ZMKDataBehaviorExternalParam?>? get ext1 {
-    final value = _ext1;
+  Map<String, ZMKDataBehaviorExternalParam?>? get options {
+    final value = _options;
     if (value == null) return null;
-    if (_ext1 is EqualUnmodifiableMapView) return _ext1;
+    if (_options is EqualUnmodifiableMapView) return _options;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableMapView(value);
   }
 
   @override
   String toString() {
-    return 'ZMKDataBehavior(code: $code, name: $name, includes: $includes, params: $params, ext1: $ext1)';
+    return 'ZMKDataBehavior(code: $code, name: $name, includes: $includes, params: $params, options: $options)';
   }
 
   @override
@@ -211,7 +211,7 @@ class _$_ZMKDataBehavior implements _ZMKDataBehavior {
             (identical(other.name, name) || other.name == name) &&
             const DeepCollectionEquality().equals(other._includes, _includes) &&
             const DeepCollectionEquality().equals(other._params, _params) &&
-            const DeepCollectionEquality().equals(other._ext1, _ext1));
+            const DeepCollectionEquality().equals(other._options, _options));
   }
 
   @JsonKey(ignore: true)
@@ -222,7 +222,7 @@ class _$_ZMKDataBehavior implements _ZMKDataBehavior {
       name,
       const DeepCollectionEquality().hash(_includes),
       const DeepCollectionEquality().hash(_params),
-      const DeepCollectionEquality().hash(_ext1));
+      const DeepCollectionEquality().hash(_options));
 
   @JsonKey(ignore: true)
   @override
@@ -244,7 +244,7 @@ abstract class _ZMKDataBehavior implements ZMKDataBehavior {
           required final String name,
           required final List<String>? includes,
           required final List<ZMKBehaviorParamType> params,
-          required final Map<String, ZMKDataBehaviorExternalParam?>? ext1}) =
+          required final Map<String, ZMKDataBehaviorExternalParam?>? options}) =
       _$_ZMKDataBehavior;
 
   factory _ZMKDataBehavior.fromJson(Map<String, dynamic> json) =
@@ -259,7 +259,7 @@ abstract class _ZMKDataBehavior implements ZMKDataBehavior {
   @override
   List<ZMKBehaviorParamType> get params;
   @override
-  Map<String, ZMKDataBehaviorExternalParam?>? get ext1;
+  Map<String, ZMKDataBehaviorExternalParam?>? get options;
   @override
   @JsonKey(ignore: true)
   _$$_ZMKDataBehaviorCopyWith<_$_ZMKDataBehavior> get copyWith =>

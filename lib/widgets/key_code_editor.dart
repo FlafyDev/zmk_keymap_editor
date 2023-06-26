@@ -20,74 +20,51 @@ class KeyCodeEditor extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final newCode = useState(code);
-    final data = ref.watch(zmkDataBehaviors);
+    final data = ref.watch(zmkDataBehaviorsProvider);
     final textController = useTextEditingController();
 
     return Container(
       width: 300,
       height: 500,
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("Choose a behavior",
-                style: Theme.of(context).textTheme.titleLarge),
-          ),
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.all(8.0),
-              child: data.when(
-                data: (data) {
-                  return SearchableList<ZMKDataBehavior>(
-                    initialList: data
-                        .where(
-                          (element) =>
-                              element.name.toLowerCase().contains(textController.value.text) ||
-                              element.code.toLowerCase().contains(textController.value.text),
-                        )
-                        .toList(),
-                    builder: (ZMKDataBehavior behavior) => Material(
-                      child: ListTile(
-                        title: Text(behavior.name),
-                        selected: newCode.value == behavior.code,
-                        subtitle: Text("${behavior.code} " +
-                            behavior.params
-                                .map((param) => "<${param.name}>")
-                                .join(", ")),
-                        onTap: () {
-                          newCode.value = behavior.code;
-                        },
-                      ),
-                    ),
-                    displayClearIcon: false,
-                    filter: (value) => data
-                        .where(
-                          (element) =>
-                              element.name.toLowerCase().contains(value.toLowerCase()) ||
-                              element.code.toLowerCase().contains(value.toLowerCase()),
-                        )
-                        .toList(),
-                    searchTextController: textController,
-                    inputDecoration: makeInputDecoration(context, hintText: "Search"),
-                  );
+      child: data.when(
+        data: (data) {
+          return SearchableList<ZMKDataBehavior>(
+            initialList: data
+                .where(
+                  (element) =>
+                      element.name.toLowerCase().contains(textController.value.text) ||
+                      element.code.toLowerCase().contains(textController.value.text),
+                )
+                .toList(),
+            builder: (ZMKDataBehavior behavior) => Material(
+              child: ListTile(
+                title: Text(behavior.name),
+                selected: newCode.value == behavior.code,
+                subtitle: Text("${behavior.code} " +
+                    behavior.params
+                        .map((param) => "<${param.name}>")
+                        .join(", ")),
+                onTap: () {
+                  newCode.value = behavior.code;
+                  onCodeChanged(newCode.value);
                 },
-                loading: () => Center(child: CircularProgressIndicator()),
-                error: (error, stackTrace) =>
-                    Center(child: Text(error.toString())),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
-              onPressed: () {
-                onCodeChanged(newCode.value);
-                Navigator.of(context).pop();
-              },
-              child: Text('Save'),
-            ),
-          ),
-        ],
+            displayClearIcon: false,
+            filter: (value) => data
+                .where(
+                  (element) =>
+                      element.name.toLowerCase().contains(value.toLowerCase()) ||
+                      element.code.toLowerCase().contains(value.toLowerCase()),
+                )
+                .toList(),
+            searchTextController: textController,
+            inputDecoration: makeInputDecoration(context, hintText: "Code"),
+          );
+        },
+        loading: () => Center(child: CircularProgressIndicator()),
+        error: (error, stackTrace) =>
+            Center(child: Text(error.toString())),
       ),
     );
   }
